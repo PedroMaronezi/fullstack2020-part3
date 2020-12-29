@@ -26,9 +26,17 @@ let persons = [
     }
 ]
 
-// Get all the persons
+// GET all the persons
 app.get('/api/persons', (request, response) => {
     response.json(persons)
+})
+
+// GET the information about the get request
+app.get('/info', (request, response) => {
+    const info = `<div>Phonebook has info for ${persons.length} people</div>
+                  <div>${new Date()}</div>`
+
+    response.send(info)
 })
 
 
