@@ -40,28 +40,29 @@ let persons = [
 
 // GET all the persons
 app.get('/api/persons', (request, response) => {
-    response.json(persons)
+    Person.find({}).then(people => {
+        response.json(people)
+    })
 })
 
 // GET the information about the get request
 app.get('/info', (request, response) => {
-    const info = `<div>Phonebook has info for ${persons.length} people</div>
-                  <div>${new Date()}</div>`
-
-    response.send(info)
+    Person.find({}).then(people => {
+        const info = `<div>Phonebook has info for ${people.length} people</div>
+                      <div>${new Date()}</div>`
+        response.send(info)
+    }) 
 })
 
 // GET information about a specific person
 app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    const person = persons.find(person => person.id === id)
-
-    if (person){
-        response.json(person)
-    } else {
-        response.status(404).end()
-    }
-
+    Person.findById(request.params.id).then(person => {
+        if (person){
+            response.json(person)
+        } else {
+            response.status(404).end()
+        }
+    })
 })
 
 // DELETE one person from the phonebook
