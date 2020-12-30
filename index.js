@@ -16,29 +16,6 @@ const generateId = () => {
     return Math.round(Math.random() * 100000)
 }
 
-let persons = [
-    {
-      "name": "Arto Hellas",
-      "number": "040-123456",
-      "id": 1
-    },
-    {
-      "name": "Ada Lovelace",
-      "number": "39-44-5323523",
-      "id": 2
-    },
-    {
-      "name": "Dan Abramov",
-      "number": "12-43-234345",
-      "id": 3
-    },
-    {
-      "name": "Mary Poppendieck",
-      "number": "39-23-6423122",
-      "id": 4
-    }
-]
-
 // GET all the persons
 app.get('/api/persons', (request, response) => {
     Person.find({}).then(people => {
@@ -97,6 +74,22 @@ app.post('/api/persons', (request, response) => {
         console.log(`Added ${savedPerson.name} number ${savedPerson.number} to the phonebook`)
         response.json(savedPerson)
     })
+})
+
+// PUT new information about an existing person
+app.put('/api/persons/:id', (request, response, next) => {
+    const body = request.body
+
+    const person = {
+        name: body.name,
+        number: body.number
+    }
+
+    Person.findByIdAndUpdate(request.params.id, person, { new: true })
+        .then(updatedPerson => {
+            response.json(updatedPerson)
+        })
+        .catch(error => next(error))
 })
 
 /*** Middleware for error handling ***/
